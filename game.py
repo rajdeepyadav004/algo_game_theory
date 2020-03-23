@@ -1,7 +1,38 @@
 
 
-class game:
 
+def arg_min(lst):
+
+	### VIRGIN METHOD ###
+	res = 0
+	curr_min = lst[0]
+	for i in range(len(lst)):
+		if lst[i] < curr_min:
+			curr_min = lst[i]
+			res = i
+	return res
+
+
+	### CHAD METHOD ###
+	# return min(range(len(lst)), key = lambda i: lst[i])
+
+
+
+def arg_max(lst):
+
+	## VIRGIN METHOD ### 
+	res = 0
+	curr_max = lst[0]
+	for i in range(len(lst)):
+		if lst[i] > curr_max:
+			curr_max = lst[i]
+			res = i
+	return res
+
+	### CHAD METHOD ###
+	# return max(range(len(lst)), key = lambda i: lst[i])
+
+class game:
 	def __init__(self, num_rows, num_columns):
 		self.num_rows = num_rows
 		self.num_columns = num_columns		
@@ -75,8 +106,8 @@ if __name__ == '__main__':
 
 
 	game1.print_game()
-	# print(game1.best_response(2, 2))
-	print(game1.max_min(1))
-	print(game1.max_min(2))
-	print(game1.min_max(1))
-	print(game1.min_max(2))
+	
+
+	a = [1,2,3,2,1,-100,13,43,4,-1,2,2,21,1,1,10]
+	print(arg_min(a))
+	print(arg_max(a))
