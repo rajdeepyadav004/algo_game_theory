@@ -26,23 +26,33 @@ class game:
 					current_max = self.utility_1[i][move]
 					best_response_move = i
 
-		if(player_num == 2):
 			current_max = self.utility_2[move][0]
 			for i in range(self.num_rows):
 				if (self.utility_2[move][i] > current_max):
 					current_max = self.utility_2[move][i]
 					best_response_move = i 
 
-
 		'''returns the number of best response'''
 		return best_response_move
 
 	def max_min(self, player_num):
-		pass
+		if player_num==1:
+			return max([min(x) for x in self.utility_1])
+		else:	
+			min_of_columns = [0]*self.num_columns
+			for i in range(self.num_columns):
+				min_of_columns[i] = min([x[i] for x in self.utility_2])
+			return max(min_of_columns)
 
 	def min_max(self, player_num):
-		pass
-
+		if player_num == 1:
+			max_of_rows = [0]*self.num_rows
+			for i in range(self.num_rows):
+				max_of_rows[i] = max([x[i] for x in self.utility_1])
+			return min(max_of_rows)
+		else:
+			return min([max(x) for x in self.utility_2])
+		
 
 	def print_game(self):
 		for i in range(self.num_rows):
@@ -56,8 +66,8 @@ if __name__ == '__main__':
 
 	game1 = game(3,3)
 
-	u1 = [[2,4,2],[1,2,4],[1,2,3]]
-	u2 = [[3,4,2],[1,2,1],[2,7,3]]
+	u1 = [[6,8,0],[10,5,2],[8,20,4]]
+	u2 = [[6,20,8],[0,5,8],[0,0,4]]
 
 
 	game1.set_utility_1(u1)
@@ -65,5 +75,8 @@ if __name__ == '__main__':
 
 
 	game1.print_game()
-	print(game1.best_response(2, 2))
-
+	# print(game1.best_response(2, 2))
+	print(game1.max_min(1))
+	print(game1.max_min(2))
+	print(game1.min_max(1))
+	print(game1.min_max(2))
