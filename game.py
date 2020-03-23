@@ -1,5 +1,7 @@
 
 
+def get_column(matrix, num_col):
+	return [row[num_col] for row in matrix] 
 
 def arg_min(lst):
 
@@ -32,6 +34,9 @@ def arg_max(lst):
 	### CHAD METHOD ###
 	# return max(range(len(lst)), key = lambda i: lst[i])
 
+
+
+
 class game:
 	def __init__(self, num_rows, num_columns):
 		self.num_rows = num_rows
@@ -48,9 +53,11 @@ class game:
 		'''player num can be 1 or 2'''
 		'''move represents the move of the other player'''
 
+
 		best_response_move = 0
 
 		if(player_num == 1):
+
 			current_max = self.utility_1[0][move]
 			for i in range(self.num_columns):
 				if (self.utility_1[i][move] > current_max):
@@ -107,7 +114,3 @@ if __name__ == '__main__':
 
 	game1.print_game()
 	
-
-	a = [1,2,3,2,1,-100,13,43,4,-1,2,2,21,1,1,10]
-	print(arg_min(a))
-	print(arg_max(a))
