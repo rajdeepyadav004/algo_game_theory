@@ -1,5 +1,5 @@
 
-import math
+
 class game:
 
 	def __init__(self, num_rows, num_columns):
@@ -20,79 +20,51 @@ class game:
 		best_response_move = 0
 
 		if(player_num == 1):
-			current_max = -1*float('inf')
+			current_max = self.utility_1[0][move]
 			for i in range(self.num_columns):
 				if (self.utility_1[i][move] > current_max):
 					current_max = self.utility_1[i][move]
 					best_response_move = i
 
+
 		if(player_num == 2):
-			current_max = -1*float('inf')
+			current_max = self.utility_2[move][0]
 			for i in range(self.num_rows):
 				if (self.utility_2[move][i] > current_max):
 					current_max = self.utility_2[move][i]
 					best_response_move = i 
 
-
 		'''returns the number of best response'''
 		return best_response_move
 
+	def nash(self):
+		nash_set = []
+		for i in range(self.num_columns):
+			move = self.best_response(1,i)
+			if (self.best_response(2,move)==i):
+				nash_element = (move,i)
+				nash_set.append(nash_element)
+
+		return nash_set
+
 	def max_min(self, player_num):
-		'''returns the max_min strategy of the given player, given it works'''
-		max_min_move = 0
-
-		if(player_num == 1):
-			current_max_min = -1*float('inf')
-			for i in range(self.num_rows):
-				current_min = float('inf')
-				for j in range(self.num_columns):
-					if(self.utility_1[i][j] < current_min):
-						current_min = self.utility_1[i][j]
-				if(current_min > current_max_min):
-					current_max_min = current_min
-					max_min_move = i
-
-		if(player_num == 2):
-			current_max_min = -1*float('inf')
-			for j in range(self.num_columns):
-				current_min = float('inf')
-				for i in range(self.num_rows):
-					if(self.utility_2[i][j] < current_min):
-						current_min = self.utility_2[i][j]
-				if(current_min > current_max_min):
-					current_max_min = current_min
-					max_min_move = j
-		return max_min_move
-	
+		if player_num==1:
+			return max([min(x) for x in self.utility_1])
+		else:	
+			min_of_columns = [0]*self.num_columns
+			for i in range(self.num_columns):
+				min_of_columns[i] = min([x[i] for x in self.utility_2])
+			return max(min_of_columns)
 
 	def min_max(self, player_num):
-		'''returns the min_max strategy against the given player, given it works'''
-		min_max_move = 0
-
-		if(player_num == 1):
-			current_min_max = float('inf')
-			for j in range(self.num_columns):
-				current_max = -1*float('inf')
-				for i in range(self.num_rows):
-					if(self.utility_1[i][j] > current_max):
-						current_max = self.utility_1[i][j]
-				if(current_max < current_min_max):
-					current_min_max = current_max
-					min_max_move = j
-
-		if(player_num == 2):
-			current_min_max = float('inf')
+		if player_num == 1:
+			max_of_rows = [0]*self.num_rows
 			for i in range(self.num_rows):
-				current_max = -1*float('inf')
-				for j in range(self.num_columns):
-					if(self.utility_2[i][j] > current_max):
-						current_max = self.utility_2[i][j]
-				if(current_max < current_min_max):
-					current_min_max = current_max
-					min_max_move = i
-		return min_max_move
-
-
+				max_of_rows[i] = max([x[i] for x in self.utility_1])
+			return min(max_of_rows)
+		else:
+			return min([max(x) for x in self.utility_2])
+		
 
 	def print_game(self):
 		for i in range(self.num_rows):
@@ -120,4 +92,5 @@ if __name__ == '__main__':
 	print(game1.max_min(2))
 	print(game1.min_max(1))
 	print(game1.min_max(2))
+	print(game1.nash())
 
