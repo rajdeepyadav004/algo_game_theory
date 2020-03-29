@@ -1,5 +1,7 @@
 
 
+
+
 class game:
 
 	def __init__(self, num_rows, num_columns):
@@ -26,6 +28,7 @@ class game:
 					current_max = self.utility_1[i][move]
 					best_response_move = i
 
+		if(player_num == 2):
 			current_max = self.utility_2[move][0]
 			for i in range(self.num_rows):
 				if (self.utility_2[move][i] > current_max):
@@ -34,6 +37,16 @@ class game:
 
 		'''returns the number of best response'''
 		return best_response_move
+
+	def nash(self):
+		nash_set = []
+		for i in range(self.num_columns):
+			move = self.best_response(1,i)
+			if (self.best_response(2,move)==i):
+				nash_element = (move,i)
+				nash_set.append(nash_element)
+
+		return nash_set
 
 	def max_min(self, player_num):
 		if player_num==1:
@@ -75,8 +88,9 @@ if __name__ == '__main__':
 
 
 	game1.print_game()
-	# print(game1.best_response(2, 2))
 	print(game1.max_min(1))
 	print(game1.max_min(2))
 	print(game1.min_max(1))
 	print(game1.min_max(2))
+	print(game1.nash())
+
