@@ -71,6 +71,22 @@ class game:
 			return arg_min([max(get_row(self.utility_2, i)) for i in range(self.num_columns)])
 		
 
+	def nash_brute_force(self):
+		for row in range(self.num_rows):
+			for column in range(self.num_columns):
+				
+				if(row == arg_max(get_column(self.utility_1, column)) and column == arg_max(get_row(self.utility_2, row))):
+					return (row,column)
+
+		return None 
+
+	def nash_method_2(self):
+		for column in range(self.num_columns):
+			max_column_ind = arg_max(get_column(self.utility_1, column))
+			if (column == arg_max(get_row(self.utility_2, max_column_ind))):
+				return max_column_ind, column
+		return None
+
 	def print_game(self):
 		for i in range(self.num_rows):
 			print(" ".join([str(x) for x in zip(self.utility_1[i], self.utility_2[i])]))
@@ -81,10 +97,10 @@ class game:
 if __name__ == '__main__':
 	
 
-	game1 = game(3,3)
+	game1 = game(2,2)
 
-	u1 = [[6,8,0],[10,5,2],[8,20,4]]
-	u2 = [[6,20,8],[0,5,8],[0,0,4]]
+	u1 = [[-5,-2],[-10,-4]]
+	u2 = [[-5,-10], [-2, -4]]
 
 
 	game1.set_utility_1(u1)
@@ -97,3 +113,5 @@ if __name__ == '__main__':
 	print(game1.min_max(2))
 	print(game1.max_min(1))
 	print(game1.max_min(2))
+	print(game1.nash_brute_force())
+	print(game1.nash_method_2())
