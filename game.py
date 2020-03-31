@@ -14,59 +14,80 @@ class game:
 	def set_utility_2(self, arg_utility):
 		self.utility_2 = arg_utility
 
-	def best_response(self, player_num, move):
-		'''best response of player 1'''
-		'''player num can be 1 or 2'''
-		'''move represents the move of the other player'''
+	def arg_max_index(self,lst):
+		t = 0
+		current_max = lst[0]
+		for i in range (len(lst)):
+			if(current_max<lst[i]):
+				current_max = lst[i]
+				t = i
 
-		best_response_move = 0
+		return t
 
-		if(player_num == 1):
-			current_max = self.utility_1[0][move]
-			for i in range(self.num_columns):
-				if (self.utility_1[i][move] > current_max):
-					current_max = self.utility_1[i][move]
-					best_response_move = i
+	def arg_max(self,lst):
+		current_max = lst[0]
+		for i in range (len(lst)):
+			if(current_max<lst[i]):
+				current_max = lst[i]
 
-		if(player_num == 2):
-			current_max = self.utility_2[move][0]
-			for i in range(self.num_rows):
-				if (self.utility_2[move][i] > current_max):
-					current_max = self.utility_2[move][i]
-					best_response_move = i 
+		return current_max
 
-		'''returns the number of best response'''
-		return best_response_move
+	def arg_min_index(self,lst):
+		t = 0
+		current_min = lst[0]
+		for i in range (len(lst)):
+			if(current_min>lst[i]):
+				current_min = lst[i]
+				t = i
+
+		return t
+
+	def arg_min(self,lst):
+		current_min = lst[0]
+		for i in range (len(lst)):
+			if(current_min>lst[i]):
+				current_min = lst[i]
+
+		return current_min
+
+	def get_row(self,player_num,row_num):
+
+		return [self.utility_1[row_num][i] for i in range(self.num_columns)] if player_num == 1 else [self.utility_2[row_num][i] for i in range(self.num_columns)]
+
+	def get_column(self,player_num,column_num):
+
+		return [self.utility_1[i][column_num] for i in range(self.num_rows)] if player_num == 1 else [self.utility_2[i][column_num] for i in range(self.num_rows)]
+
+
+	def best_response_move(self,player_num,move):
+		return self.arg_max_index(self.get_column(1, move)) if player_num == 1 else self.arg_max_index(self.get_row(2,move))
+
+	def best_response_utility(self,player_num,move):
+		return self.arg_max(self.get_column(1, move)) if player_num == 1 else self.arg_max(self.get_row(2,move))
 
 	def nash(self):
 		nash_set = []
 		for i in range(self.num_columns):
-			move = self.best_response(1,i)
-			if (self.best_response(2,move)==i):
+			move = self.best_response_move(1,i)
+			if (self.best_response_move(2,move)==i):
 				nash_element = (move,i)
 				nash_set.append(nash_element)
 
 		return nash_set
 
-	def max_min(self, player_num):
-		if player_num==1:
-			return max([min(x) for x in self.utility_1])
-		else:	
-			min_of_columns = [0]*self.num_columns
-			for i in range(self.num_columns):
-				min_of_columns[i] = min([x[i] for x in self.utility_2])
-			return max(min_of_columns)
+	def max_min_value(self,player_num):
+		return self.arg_max([min(self.get_row(1,i)) for i in range(self.num_rows)]) if player_num == 1 else self.arg_max([min(self.get_column(2,i)) for i in range(self.num_columns)])
 
-	def min_max(self, player_num):
-		if player_num == 1:
-			max_of_rows = [0]*self.num_rows
-			for i in range(self.num_rows):
-				max_of_rows[i] = max([x[i] for x in self.utility_1])
-			return min(max_of_rows)
-		else:
-			return min([max(x) for x in self.utility_2])
+	def max_min_strategy(self,player_num):
+		return self.arg_max_index([min(self.get_row(1,i)) for i in range(self.num_rows)]) if player_num == 1 else self.arg_max_index([min(self.get_column(2,i)) for i in range(self.num_columns)])
 		
 
+	def min_max_value(self,player_num):
+		return self.arg_min([max(self.get_column(1,i)) for i in range(self.num_columns)]) if player_num == 1 else self.arg_min([max(self.get_row(2,i)) for i in range(self.num_rows)])
+
+	def min_max_strategy(self,player_num):
+		return self.arg_min_index([max(self.get_column(1,i)) for i in range(self.num_columns)]) if player_num == 1 else self.arg_min_index([max(self.get_row(2,i)) for i in range(self.num_rows)])
+		
 	def print_game(self):
 		for i in range(self.num_rows):
 			print(" ".join([str(x) for x in zip(self.utility_1[i], self.utility_2[i])]))
@@ -88,9 +109,11 @@ if __name__ == '__main__':
 
 
 	game1.print_game()
-	print(game1.max_min(1))
-	print(game1.max_min(2))
-	print(game1.min_max(1))
-	print(game1.min_max(2))
+	print(game1.best_response_utility(1,2))
+	print(game1.best_response_move(2,1))
+	print(game1.max_min_strategy(1))
+	print(game1.max_min_value(2))
+	print(game1.min_max_strategy(1))
+	print(game1.min_max_value(2))
 	print(game1.nash())
 
