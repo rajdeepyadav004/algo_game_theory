@@ -74,7 +74,6 @@ class game:
 	def nash_brute_force(self):
 		for row in range(self.num_rows):
 			for column in range(self.num_columns):
-				
 				if(row == arg_max(get_column(self.utility_1, column)) and column == arg_max(get_row(self.utility_2, row))):
 					return (row,column)
 
