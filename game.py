@@ -12,16 +12,10 @@ def arg_min(lst):
 	return [x[0] for x in filter(equal_to_min, enumerate(lst))] 
 
 
-
-def arg_max_set(lst):
+def arg_max(lst):
 	max_value = max(lst)
 	equal_to_max = lambda x: x[1] == max_value
 	return [x[0] for x in filter(equal_to_max, enumerate(lst))]
-
-
-def arg_max(lst):
-	max_value = max(lst)
-	return [x[0] for x in filter(lambda x: x[1] == max_value, enumerate(lst))]
 
 
 class game:
@@ -64,6 +58,7 @@ class game:
 
 		return nash_set 
 
+
 	def nash_method_2(self):
 		nash_set = []
 		for column in range(self.num_columns):
@@ -72,6 +67,34 @@ class game:
 				if (column in arg_max(get_row(self.utility_2, row))):
 					nash_set.append((row, column))
 		return nash_set
+ 
+
+	def nash_elimination(self):
+		row_list = range(self.num_rows)
+		column_list = range(self.num_columns)
+
+		for row1 in range(num_rows):
+			for row2 in range(num_columns):
+				bool first_dominated = True, second_dominated = True
+				for col in column_list:
+					if(self.utility_1[row1][col] >= self.utility_1[row2][col]):
+						first_dominated = False
+
+					if(self.utility_1[row1][col1] <= self.utility_1[row2][vol]):
+						second_dominated = False
+
+					if(not (first_dominated  or second_dominated)):
+						break
+
+				if(first_dominated):
+					row_list.remove(row1)
+
+				if(second_dominated):
+					row_list.remove(row2)
+
+		
+
+
 
 	def print_game(self):
 		for i in range(self.num_rows):
@@ -101,3 +124,6 @@ if __name__ == '__main__':
 	print(game1.max_min(2))
 	print(game1.nash_brute_force())
 	print(game1.nash_method_2())
+
+
+
