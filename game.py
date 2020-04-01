@@ -2,6 +2,31 @@
 
 
 
+
+
+def arg_max(lst):
+	t = 0
+	current_max = lst[0]
+	for i in range (len(lst)):
+		if(current_max<lst[i]):
+			current_max = lst[i]
+			t = i
+
+	return t
+
+
+def arg_min(lst):
+	t = 0
+	current_min = lst[0]
+	for i in range (len(lst)):
+		if(current_min>lst[i]):
+			current_min = lst[i]
+			t = i
+
+	return t
+
+
+
 class game:
 
 	def __init__(self, num_rows, num_columns):
@@ -14,41 +39,6 @@ class game:
 	def set_utility_2(self, arg_utility):
 		self.utility_2 = arg_utility
 
-	def arg_max_index(self,lst):
-		t = 0
-		current_max = lst[0]
-		for i in range (len(lst)):
-			if(current_max<lst[i]):
-				current_max = lst[i]
-				t = i
-
-		return t
-
-	def arg_max(self,lst):
-		current_max = lst[0]
-		for i in range (len(lst)):
-			if(current_max<lst[i]):
-				current_max = lst[i]
-
-		return current_max
-
-	def arg_min_index(self,lst):
-		t = 0
-		current_min = lst[0]
-		for i in range (len(lst)):
-			if(current_min>lst[i]):
-				current_min = lst[i]
-				t = i
-
-		return t
-
-	def arg_min(self,lst):
-		current_min = lst[0]
-		for i in range (len(lst)):
-			if(current_min>lst[i]):
-				current_min = lst[i]
-
-		return current_min
 
 	def get_row(self,player_num,row_num):
 
@@ -58,12 +48,12 @@ class game:
 
 		return [self.utility_1[i][column_num] for i in range(self.num_rows)] if player_num == 1 else [self.utility_2[i][column_num] for i in range(self.num_rows)]
 
-
+	
 	def best_response_move(self,player_num,move):
-		return self.arg_max_index(self.get_column(1, move)) if player_num == 1 else self.arg_max_index(self.get_row(2,move))
+		return arg_max(self.get_column(1, move)) if player_num == 1 else arg_max(self.get_row(2,move))
 
 	def best_response_utility(self,player_num,move):
-		return self.arg_max(self.get_column(1, move)) if player_num == 1 else self.arg_max(self.get_row(2,move))
+		return max(self.get_column(1, move)) if player_num == 1 else max(self.get_row(2,move))
 
 	def nash(self):
 		nash_set = []
@@ -76,17 +66,17 @@ class game:
 		return nash_set
 
 	def max_min_value(self,player_num):
-		return self.arg_max([min(self.get_row(1,i)) for i in range(self.num_rows)]) if player_num == 1 else self.arg_max([min(self.get_column(2,i)) for i in range(self.num_columns)])
+		return max([min(self.get_row(1,i)) for i in range(self.num_rows)]) if player_num == 1 else max([min(self.get_column(2,i)) for i in range(self.num_columns)])
 
 	def max_min_strategy(self,player_num):
-		return self.arg_max_index([min(self.get_row(1,i)) for i in range(self.num_rows)]) if player_num == 1 else self.arg_max_index([min(self.get_column(2,i)) for i in range(self.num_columns)])
+		return arg_max([min(self.get_row(1,i)) for i in range(self.num_rows)]) if player_num == 1 else arg_max([min(self.get_column(2,i)) for i in range(self.num_columns)])
 		
 
 	def min_max_value(self,player_num):
-		return self.arg_min([max(self.get_column(1,i)) for i in range(self.num_columns)]) if player_num == 1 else self.arg_min([max(self.get_row(2,i)) for i in range(self.num_rows)])
+		return min([max(self.get_column(1,i)) for i in range(self.num_columns)]) if player_num == 1 else min([max(self.get_row(2,i)) for i in range(self.num_rows)])
 
 	def min_max_strategy(self,player_num):
-		return self.arg_min_index([max(self.get_column(1,i)) for i in range(self.num_columns)]) if player_num == 1 else self.arg_min_index([max(self.get_row(2,i)) for i in range(self.num_rows)])
+		return arg_min([max(self.get_column(1,i)) for i in range(self.num_columns)]) if player_num == 1 else arg_min([max(self.get_row(2,i)) for i in range(self.num_rows)])
 		
 	def print_game(self):
 		for i in range(self.num_rows):
