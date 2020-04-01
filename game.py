@@ -7,37 +7,19 @@ def get_column(matrix, num_col):
 	return [row[num_col] for row in matrix] 
 
 def arg_min(lst):
-
-	### VIRGIN METHOD ###
-	res = 0
-	curr_min = lst[0]
-	for i in range(len(lst)):
-		if lst[i] < curr_min:
-			curr_min = lst[i]
-			res = i
-	return res
+	min_value = min(lst)
+	return list(filter(lambda x: x == min_value, lst)) 
 
 
-	### CHAD METHOD ###
-	# return min(range(len(lst)), key = lambda i: lst[i])
 
+def arg_max_set(lst):
+	max_value = max(lst)
+	return list(filter(lambda x; x == max_value, lst))
 
 
 def arg_max(lst):
-
-	## VIRGIN METHOD ### 
-	res = 0
-	curr_max = lst[0]
-	for i in range(len(lst)):
-		if lst[i] > curr_max:
-			curr_max = lst[i]
-			res = i
-	return res
-
-	### CHAD METHOD ###
-	# return max(range(len(lst)), key = lambda i: lst[i])
-
-
+	max_value = max(lst)
+	return list(filter(lambda x; x == max_value, lst))
 
 
 class game:
