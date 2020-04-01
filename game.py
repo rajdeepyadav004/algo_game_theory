@@ -8,18 +8,18 @@ def get_column(matrix, num_col):
 
 def arg_min(lst):
 	min_value = min(lst)
-	return list(filter(lambda x: x == min_value, lst)) 
+	return [x[0] for x in filter(lambda x: x[1] == min_value, enumerate(lst))] 
 
 
 
 def arg_max_set(lst):
 	max_value = max(lst)
-	return list(filter(lambda x; x == max_value, lst))
+	return [x[0] for x in filter(lambda x: x[1] == max_value, enumerate(lst))]
 
 
 def arg_max(lst):
 	max_value = max(lst)
-	return list(filter(lambda x; x == max_value, lst))
+	return [x[0] for x in filter(lambda x: x[1] == max_value, enumerate(lst))]
 
 
 class game:
@@ -54,19 +54,22 @@ class game:
 		
 
 	def nash_brute_force(self):
+		nash_set = []
 		for row in range(self.num_rows):
 			for column in range(self.num_columns):
-				if(row == arg_max(get_column(self.utility_1, column)) and column == arg_max(get_row(self.utility_2, row))):
-					return (row,column)
+				if(row in arg_max(get_column(self.utility_1, column)) and column in arg_max(get_row(self.utility_2, row))):
+					nash_set.append((row,column))
 
-		return None 
+		return nash_set 
 
 	def nash_method_2(self):
+		nash_set = []
 		for column in range(self.num_columns):
-			max_column_ind = arg_max(get_column(self.utility_1, column))
-			if (column == arg_max(get_row(self.utility_2, max_column_ind))):
-				return max_column_ind, column
-		return None
+			best_response_1 = arg_max(get_column(self.utility_1, column))
+			for row in best_response_1:
+				if (column in arg_max(get_row(self.utility_2, row))):
+					nash_set.append((row, column))
+		return nash_set
 
 	def print_game(self):
 		for i in range(self.num_rows):
