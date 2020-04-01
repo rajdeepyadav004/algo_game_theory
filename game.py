@@ -8,13 +8,15 @@ def get_column(matrix, num_col):
 
 def arg_min(lst):
 	min_value = min(lst)
-	return [x[0] for x in filter(lambda x: x[1] == min_value, enumerate(lst))] 
+	equal_to_min = lambda x: x[1] == min_value 
+	return [x[0] for x in filter(equal_to_min, enumerate(lst))] 
 
 
 
 def arg_max_set(lst):
 	max_value = max(lst)
-	return [x[0] for x in filter(lambda x: x[1] == max_value, enumerate(lst))]
+	equal_to_max = lambda x: x[1] == max_value
+	return [x[0] for x in filter(equal_to_max, enumerate(lst))]
 
 
 def arg_max(lst):
@@ -83,8 +85,8 @@ if __name__ == '__main__':
 
 	game1 = game(2,2)
 
-	u1 = [[-5,-2],[-10,-4]]
-	u2 = [[-5,-10], [-2, -4]]
+	u1 = [[0,0],[0,0]]
+	u2 = [[0,0], [0,0]]
 
 
 	game1.set_utility_1(u1)
