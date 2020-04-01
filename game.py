@@ -1,4 +1,9 @@
 
+import copy
+
+def get_reduced_matrix(matrix, rows, columns):
+	return [[matrix[row][col] for col in columns] for row in rows]
+
 
 def get_row(matrix, num_row):
 	return matrix[num_row]
@@ -59,40 +64,83 @@ class game:
 		return nash_set 
 
 
-	def nash_method_2(self):
+
+	def nash_helper(self, rows, columns):
+
+		reduced_utility_1 = get_reduced_matrix(self.utility_1, rows, columns)
+		reduced_utility_2 = get_reduced_matrix(self.utility_2, rows, columns)
+
 		nash_set = []
-		for column in range(self.num_columns):
-			best_response_1 = arg_max(get_column(self.utility_1, column))
+		for column in columns:
+			best_response_1 = arg_max(get_column( reduced_utility_1, column))
 			for row in best_response_1:
-				if (column in arg_max(get_row(self.utility_2, row))):
+				if (column in arg_max(get_row(reduced_utility_2, row))):
 					nash_set.append((row, column))
 		return nash_set
- 
+
+
+	def nash_method_2(self):
+		return self.nash_helper(range(self.num_rows), range(self.num_columns))
 
 	def nash_elimination(self):
+		
 		row_list = range(self.num_rows)
 		column_list = range(self.num_columns)
 
-		for row1 in range(num_rows):
-			for row2 in range(num_columns):
-				bool first_dominated = True, second_dominated = True
-				for col in column_list:
-					if(self.utility_1[row1][col] >= self.utility_1[row2][col]):
-						first_dominated = False
+		updated = True
 
-					if(self.utility_1[row1][col1] <= self.utility_1[row2][vol]):
-						second_dominated = False
 
-					if(not (first_dominated  or second_dominated)):
-						break
+		while(updated):
+			updated = False
+			temp_row_list = copy.deepcopy(row_list)
+			temp_column_list = copy.deepcopy(column_list)
 
-				if(first_dominated):
-					row_list.remove(row1)
+			for row1 in row_list:
+				for row2 in row_list:
 
-				if(second_dominated):
-					row_list.remove(row2)
+					first_dominated, second_dominated = True, True
 
-		
+					for col in column_list:
+
+						if(self.utility_1[row1][col] >= self.utility_1[row2][col]):
+							first_dominated = False
+
+						if(self.utility_1[row1][col] <= self.utility_1[row2][col]):
+							second_dominated = False
+
+					if(first_dominated):
+						temp_row_list.remove(row1)
+
+					if(second_dominated):
+						temp_row_list.remove(row2)
+
+
+			row_list = temp_row_list
+
+
+			for col1 in column_list:
+				for col2 in column_list:
+
+					first_dominated, second_dominated = True, True
+
+					for row in row_list:
+						if(self.utility_2[row][col1] >= self.utility_2[row][col2]):
+							first_dominated = False
+
+						if(self.utility_2[row][col1] <= self.utility_2[row][col2]):
+							second_dominated = False
+
+					if(first_dominated):
+						updated = True
+						temp_column_list.remove(col1)
+
+					if(second_dominated):
+						updated = False
+						temp_column_list.remove(col2)
+
+			column_list = temp_column_list
+
+		return self.nash_helper(row_list, column_list)
 
 
 
@@ -106,10 +154,10 @@ class game:
 if __name__ == '__main__':
 	
 
-	game1 = game(2,2)
+	game1 = game(3,3)
 
-	u1 = [[0,0],[0,0]]
-	u2 = [[0,0], [0,0]]
+	u1 = [[4,0,2],[0,1,0],[0,0,1]]
+	u2 = [[4,2,2],[0,1,2],[0,2,1]]
 
 
 	game1.set_utility_1(u1)
@@ -124,6 +172,7 @@ if __name__ == '__main__':
 	print(game1.max_min(2))
 	print(game1.nash_brute_force())
 	print(game1.nash_method_2())
+	print(game1.nash_elimination())
 
 
 
