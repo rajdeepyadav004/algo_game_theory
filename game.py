@@ -72,11 +72,12 @@ class game:
 
 		nash_set = []
 		for column in columns:
-			best_response_1 = arg_max(get_column( reduced_utility_1, column))
+			best_response_1 = arg_max(get_column(reduced_utility_1, column))
 			for row in best_response_1:
 				if (column in arg_max(get_row(reduced_utility_2, row))):
 					nash_set.append((row, column))
-		return nash_set
+		
+		return [(rows[pair[0]], columns[pair[1]]) for pair in nash_set]
 
 
 	def nash_method_2(self):
@@ -84,8 +85,8 @@ class game:
 
 	def nash_elimination(self):
 		
-		row_list = range(self.num_rows)
-		column_list = range(self.num_columns)
+		row_list = list(range(self.num_rows))
+		column_list = list(range(self.num_columns))
 
 		updated = True
 
@@ -95,8 +96,12 @@ class game:
 			temp_row_list = copy.deepcopy(row_list)
 			temp_column_list = copy.deepcopy(column_list)
 
+
 			for row1 in row_list:
 				for row2 in row_list:
+
+					if(row1 == row2):
+						break
 
 					first_dominated, second_dominated = True, True
 
@@ -108,18 +113,20 @@ class game:
 						if(self.utility_1[row1][col] <= self.utility_1[row2][col]):
 							second_dominated = False
 
-					if(first_dominated):
+					if(first_dominated and row1 in temp_row_list):
 						temp_row_list.remove(row1)
 
-					if(second_dominated):
+					if(second_dominated and row2 in temp_row_list):
 						temp_row_list.remove(row2)
 
 
 			row_list = temp_row_list
 
-
 			for col1 in column_list:
 				for col2 in column_list:
+
+					if(col1 == col2):
+						break
 
 					first_dominated, second_dominated = True, True
 
@@ -130,18 +137,19 @@ class game:
 						if(self.utility_2[row][col1] <= self.utility_2[row][col2]):
 							second_dominated = False
 
-					if(first_dominated):
+					if(first_dominated and col1 in temp_column_list):
 						updated = True
+
 						temp_column_list.remove(col1)
 
-					if(second_dominated):
+					if(second_dominated and col2 in temp_column_list):
 						updated = False
 						temp_column_list.remove(col2)
 
 			column_list = temp_column_list
 
-		return self.nash_helper(row_list, column_list)
 
+		return self.nash_helper(row_list, column_list)
 
 
 	def print_game(self):
@@ -156,8 +164,8 @@ if __name__ == '__main__':
 
 	game1 = game(3,3)
 
-	u1 = [[4,0,2],[0,1,0],[0,0,1]]
-	u2 = [[4,2,2],[0,1,2],[0,2,1]]
+	u1 = [[2,1,3],[0,0,2],[1,0,1]]
+	u2 = [[5,2,2],[1,1,1],[0,0,0]]
 
 
 	game1.set_utility_1(u1)
@@ -166,12 +174,12 @@ if __name__ == '__main__':
 
 	game1.print_game()
 	
-	print(game1.min_max(1))
-	print(game1.min_max(2))
-	print(game1.max_min(1))
-	print(game1.max_min(2))
-	print(game1.nash_brute_force())
-	print(game1.nash_method_2())
+	# print(game1.min_max(1))
+	# print(game1.min_max(2))
+	# print(game1.max_min(1))
+	# print(game1.max_min(2))
+	# print(game1.nash_brute_force())
+	# print(game1.nash_method_2())
 	print(game1.nash_elimination())
 
 
