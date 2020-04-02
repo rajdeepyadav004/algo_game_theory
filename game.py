@@ -55,6 +55,7 @@ class game:
 		
 
 	def nash_brute_force(self):
+		
 		nash_set = []
 		for row in range(self.num_rows):
 			for column in range(self.num_columns):
@@ -71,7 +72,7 @@ class game:
 		reduced_utility_2 = get_reduced_matrix(self.utility_2, rows, columns)
 
 		nash_set = []
-		for column in columns:
+		for column in range(len(columns)):
 			best_response_1 = arg_max(get_column(reduced_utility_1, column))
 			for row in best_response_1:
 				if (column in arg_max(get_row(reduced_utility_2, row))):
@@ -143,7 +144,7 @@ class game:
 						temp_column_list.remove(col1)
 
 					if(second_dominated and col2 in temp_column_list):
-						updated = False
+						updated = True
 						temp_column_list.remove(col2)
 
 			column_list = temp_column_list
@@ -164,8 +165,8 @@ if __name__ == '__main__':
 
 	game1 = game(3,3)
 
-	u1 = [[2,1,3],[0,0,2],[1,0,1]]
-	u2 = [[5,2,2],[1,1,1],[0,0,0]]
+	u1 = [[1,2,3],[0,0,2],[1,0,1]]
+	u2 = [[2,5,2],[1,1,1],[0,0,0]]
 
 
 	game1.set_utility_1(u1)
