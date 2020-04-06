@@ -1,4 +1,4 @@
-
+from functools import reduce
 
 def arg_max(lst):
 	max_value = max(lst[i] for i in range(len(lst)))
@@ -41,6 +41,35 @@ class game:
 	def get_column(self,player_num,column_num):
 
 		return [self.utility_1[i][column_num] for i in range(self.num_rows)] if player_num == 1 else [self.utility_2[i][column_num] for i in range(self.num_rows)]
+
+
+	def reduced_game_nash(self):
+		get_row_set = [self.get_row(1,i) for i in range(self.num_rows)]
+		get_column_set = [self.get_column(2,i) for i in range(self.num_columns)]
+
+		for p in range(max(self.num_rows,self.num_columns)):
+			for i in range(len(get_row_set)):
+				current_row = get_row_set[i]
+				v = list(filter(lambda y: reduce(lambda r,s: r and s,[current_row[j] < y[j] for j in range(len(get_row_set[0]))] ), list(filter(lambda x: x != current_row, get_row_set)) ))
+				if len(v) != 0:
+					del get_row_set[i]
+					for k in range(len(get_column_set)):
+						del(get_column_set[k])[i]
+
+			for t in range(len(get_column_set)):
+				current_column = get_column_set[t]
+				v = list(filter(lambda y: reduce(lambda r,s: r and s, [current_column[j] < y[j] for j in range(len(get_column_set[0]))]), list(filter(lambda x: x!= current_column, get_column_set)) ))
+				if len(v) != 0:
+					del get_column_set[t]
+					for k in range(len(get_row_set)):
+						del(get_row_set[k])[t]
+			
+		column_set = []
+		for j in range(len(get_column_set[0])):
+			column_set_element = [get_column_set[i][j] for i in range(len(get_column_set))]
+			column_set.append(column_set_element)
+
+		return (get_row_set, column_set)
 
 	
 	def best_response_move(self,player_num,move):
@@ -88,12 +117,17 @@ if __name__ == '__main__':
 
 	game1 = game(3,3)
 
-	u1 = [[6,8,0],[10,5,2],[8,20,4]]
-	u2 = [[6,20,8],[0,5,8],[0,0,4]]
+	u1 = [[10,5,3],[0,4,6],[2,3,2]]
+	u2 = [[4,3,2],[1,6,0],[1,5,8]]
 
 
 	game1.set_utility_1(u1)
 	game1.set_utility_2(u2)
+
+	(z1, z2) = game1.reduced_game_nash()
+	reduced_game = game((len(z1)), (len(z2)) )
+	reduced_game.set_utility_1(z1)
+	reduced_game.set_utility_2(z2)
 
 
 	game1.print_game()
@@ -104,4 +138,5 @@ if __name__ == '__main__':
 	print(game1.min_max_strategy(1))
 	print(game1.min_max_value(2))
 	print(game1.nash())
+	print(reduced_game.nash())
 
