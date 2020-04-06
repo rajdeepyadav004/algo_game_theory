@@ -15,12 +15,6 @@ class TestNashEquilibria(unittest.TestCase):
 		(z1, z2) = game1.reduced_game_nash()
 		self.assertEqual(nash_equilibria, set(game1.nash()))
 
-
-	# def test_nash_2(self):
-	# 	game1.set_utility_1(u1)
-	# 	game1.set_utility_2(u2)
-	# 	self.assertEqual(nash_equilibria, set(game1.nash_method_2()))
-
 	def test_nash_elimination(self):
 		game1.set_utility_1(u1)
 		game1.set_utility_2(u2)
