@@ -49,20 +49,26 @@ class game:
 
 		for p in range(max(self.num_rows,self.num_columns)):
 			for i in range(len(get_row_set)):
-				current_row = get_row_set[i]
+				current_row = get_row_set[0]
 				v = list(filter(lambda y: reduce(lambda r,s: r and s,[current_row[j] < y[j] for j in range(len(get_row_set[0]))] ), list(filter(lambda x: x != current_row, get_row_set)) ))
 				if len(v) != 0:
-					del get_row_set[i]
+					del get_row_set[0]
 					for k in range(len(get_column_set)):
-						del(get_column_set[k])[i]
+						del(get_column_set[k])[0]
+				else:
+					get_row_set.pop(0)
+					get_row_set.append(current_row)
 
 			for t in range(len(get_column_set)):
-				current_column = get_column_set[t]
+				current_column = get_column_set[0]
 				v = list(filter(lambda y: reduce(lambda r,s: r and s, [current_column[j] < y[j] for j in range(len(get_column_set[0]))]), list(filter(lambda x: x!= current_column, get_column_set)) ))
 				if len(v) != 0:
-					del get_column_set[t]
+					del get_column_set[0]
 					for k in range(len(get_row_set)):
-						del(get_row_set[k])[t]
+						del(get_row_set[k])[0]
+				else:
+					get_column_set.pop(0)
+					get_column_set.append(current_column)
 			
 		column_set = []
 		for j in range(len(get_column_set[0])):
@@ -117,8 +123,8 @@ if __name__ == '__main__':
 
 	game1 = game(3,3)
 
-	u1 = [[10,5,3],[0,4,6],[2,3,2]]
-	u2 = [[4,3,2],[1,6,0],[1,5,8]]
+	u1 = [[4,3,2],[3,2,1],[2,1,0]]
+	u2 = [[1,0,0],[1,1,1],[1,1,1]]
 
 
 	game1.set_utility_1(u1)
